@@ -22,6 +22,7 @@ namespace ReactionGame.Models
         private IHubConnectionContext _clients;
         private readonly List<string> _players = new List<string>();
         private GameStatus _gameStatus = GameStatus.NewGame;
+        private Random _random = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
         private Timer _timer;
         private readonly static Lazy<GameBookkeeper> _instance =
             new Lazy<GameBookkeeper>(() => new GameBookkeeper(GlobalHost.ConnectionManager.GetHubContext<ReactionGameHub>().Clients));
@@ -44,11 +45,19 @@ namespace ReactionGame.Models
             switch (_gameStatus)
             {
                 case GameStatus.NewGame:
-                    _gameStatus = GameStatus.GetReady;
-                    _clients.All.updateGameStatus(_gameStatus.ToString());
-                    //_timer = new Timer(ChangeGameStatus, null, 0, 10000);
+                    _gameStatus = GameStatus.Stop;                    
+                    _timer = new Timer(ChangeGameStatus, null, 10000, Timeout.Infinite);
                     break;
-            }                      
+                case GameStatus.Stop:
+                    _gameStatus = GameStatus.GetReady;
+                    _timer.Change(_random.Next(5000) + 1000, Timeout.Infinite);
+                    break;
+                case GameStatus.GetReady:
+                    _gameStatus = GameStatus.Go;
+                    _timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    break;
+            }
+            _clients.All.updateGameStatus(_gameStatus.ToString());     
         }
     }
 }
