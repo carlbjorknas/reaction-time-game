@@ -8,7 +8,7 @@ namespace ReactionGame.Hubs
 {
     public class ReactionGameHub : Hub
     {
-        private List<string> players = new List<string>();
+        private static List<string> players = new List<string>();
 
         public void Hello()
         {
