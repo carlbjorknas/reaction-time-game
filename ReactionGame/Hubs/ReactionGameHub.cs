@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
+using ReactionGame.Models;
 
 namespace ReactionGame.Hubs
 {
     public class ReactionGameHub : Hub
-    {
-        private static List<string> players = new List<string>();
-
+    {     
         public void Hello()
         {
             Clients.All.hello();
@@ -17,8 +16,7 @@ namespace ReactionGame.Hubs
 
         public void Join(string name)
         {
-            players.Add(name);
-            Clients.All.updateListOfPlayers(players);
+            GameBookkeeper.Instance.AddPlayer(name);           
         }
     }
 }

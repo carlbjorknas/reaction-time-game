@@ -7,6 +7,9 @@
 <div>
     <input type="hidden" id="playerName" />
     <ul id="listOfPlayers"></ul>
+    <div id="clickTarget" style="width:200px;height:200px">
+
+    </div>
 </div>
 
 @section scripts {
@@ -27,9 +30,10 @@
                 $listOfPlayers.empty();
                 $.each(players, function (index, player) {
                     $listOfPlayers.append('<li>' + htmlEncode(player) + '</li>');
-                });
-                
+                });                
             };
+
+            game.client.updateGameStatus = function (status) { updateGameStatus(status) };
             // Get the user name and store it to prepend to messages.
             $('#playerName').val(prompt('Enter your name:', ''));
             // Start the connection.
@@ -42,6 +46,18 @@
         function htmlEncode(value) {
             var encodedValue = $('<div />').text(value).html();
             return encodedValue;
+        }
+
+        function updateGameStatus(status){            
+            var color;
+            switch (status) {
+                case "GetReady": color = '#ffff00'; break;
+                case "Go": color = '#00ff00'; break;
+                case "Stop": color = 'ff0000'; break;
+                default: color = '000000'; break;
+            }
+            var $clicktarget = $('#clickTarget');
+            $clicktarget.css('background-color', color);
         }
     </script>
 }
