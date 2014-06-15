@@ -29,6 +29,7 @@
             $gameHub.client.updateListOfPlayers = function (players) { updateListOfPlayers(players, $gameHub.connection.id); };
             $gameHub.client.updateGameStatus = function (status) { updateGameStatus(status); };
             $gameHub.client.showFastestClicker = function (player) { showFastestClicker(player, $gameHub.connection.id); };
+            $gameHub.client.showTooTriggerHappy = function (player) { showTooTriggerHappy(player, $gameHub.connection.id); };
 
             // Get the user name and store it to prepend to messages.
             $('#playerName').val(prompt('Enter your name:', ''));
@@ -81,6 +82,11 @@
         function showFastestClicker(player, connectionId) {
             var fastest = player.Id == connectionId ? 'DU!!!' : player.Name;
             $('#message').text('Snabbast var ' + fastest).fadeIn(500).fadeOut(3000);
+        }
+
+        function showTooTriggerHappy(player, connectionId) {
+            var triggerHappy = player.Id == connectionId ? 'Du' : player.Name;
+            $('#message').text(triggerHappy + ' tjuvstartade!').fadeIn(500).fadeOut(1000);
         }
 
         function targetClicked() {

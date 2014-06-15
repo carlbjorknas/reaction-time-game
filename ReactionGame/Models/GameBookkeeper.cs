@@ -80,6 +80,12 @@ namespace ReactionGame.Models
                         _clients.All.updateListOfPlayers(_players);
                         _clients.All.showFastestClicker(player);
                     }
+                    else if (_gameStatus == GameStatus.GetReady)
+                    {
+                        player.Points--;
+                        _clients.All.updateListOfPlayers(_players);
+                        _clients.All.showTooTriggerHappy(player);
+                    }
                 }
             }
         }
