@@ -78,6 +78,7 @@ namespace ReactionGame.Models
                         player.Points++;
                         ChangeGameStatus(null);
                         _clients.All.updateListOfPlayers(_players);
+                        _clients.All.showFastestClicker(player);
                     }
                 }
             }
