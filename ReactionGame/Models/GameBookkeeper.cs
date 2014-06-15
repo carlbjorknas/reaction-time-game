@@ -40,7 +40,9 @@ namespace ReactionGame.Models
         public void AddPlayer(Player player)
         {
             _players.AddOrUpdate(player.Id, player, (k, v) => { v.Name = player.Name; return v; });
-            _clients.All.updateListOfPlayers(_players);
+            SendUpdateListOfPlayers();
+            _clients.Client(player.Id).updateGameStatus(_gameStatus.ToString());
+            _clients.All.playerJoined(player);
         }
 
         private void ChangeGameStatus(object state){
@@ -48,7 +50,7 @@ namespace ReactionGame.Models
             {
                 case GameStatus.NewGame:
                     _gameStatus = GameStatus.Stop;                    
-                    _timer = new Timer(ChangeGameStatus, null, 10000, Timeout.Infinite);
+                    _timer = new Timer(ChangeGameStatus, null, 5000, Timeout.Infinite);
                     break;
                 case GameStatus.Stop:
                     _gameStatus = GameStatus.GetReady;
@@ -77,13 +79,13 @@ namespace ReactionGame.Models
                     {
                         player.Points++;
                         ChangeGameStatus(null);
-                        _clients.All.updateListOfPlayers(_players);
+                        SendUpdateListOfPlayers();
                         _clients.All.showFastestClicker(player);
                     }
                     else if (_gameStatus == GameStatus.GetReady)
                     {
                         player.Points--;
-                        _clients.All.updateListOfPlayers(_players);
+                        SendUpdateListOfPlayers();
                         _clients.All.showTooTriggerHappy(player);
                     }
                 }
@@ -95,9 +97,18 @@ namespace ReactionGame.Models
             Player player;
             if (_players.TryRemove(id, out player))
             {
-                _clients.All.updateListOfPlayers(_players);
+                SendUpdateListOfPlayers();
                 _clients.All.playerDisconnected(player);
             }
+        }
+
+        private void SendUpdateListOfPlayers()
+        {
+            _clients.All.updateListOfPlayers(
+                _players
+                .Select(kvp=>kvp.Value)
+                .OrderByDescending(p=>p.Points)
+                .ToArray());
         }
     }
 }

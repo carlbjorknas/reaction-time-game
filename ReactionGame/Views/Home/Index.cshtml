@@ -30,6 +30,7 @@
             $gameHub.client.updateGameStatus = function (status) { updateGameStatus(status); };
             $gameHub.client.showFastestClicker = function (player) { showFastestClicker(player, $gameHub.connection.id); };
             $gameHub.client.showTooTriggerHappy = function (player) { showTooTriggerHappy(player, $gameHub.connection.id); };
+            $gameHub.client.playerJoined = function (player) { playerJoined(player); };
             $gameHub.client.playerDisconnected = function (player) { playerDisconnected(player); };
 
             // Get the user name and store it to prepend to messages.
@@ -81,23 +82,29 @@
         }
 
         function showFastestClicker(player, connectionId) {
-            var fastest = 'Snabbast var ' + (player.Id == connectionId ? 'DU!!! +1 poäng.' : player.Name);
-            var $p = $('<p style=\'background-color:#00ff00;\'>' + fastest + '</p>');
-            $('#messages').append($p);
-            $p.fadeIn(500).fadeOut(3000);
+            var message = 'Snabbast var ' + (player.Id == connectionId ? 'DU!!! +1 poäng.' : player.Name);
+            showMessage(message, '00ff00', 3000);
         }
 
         function showTooTriggerHappy(player, connectionId) {
-            var triggerHappy = (player.Id == connectionId ? 'Du' : player.Name) + ' tjuvstartade! -1 poäng.';
-            var $p = $('<p style=\'background-color:#ff0000;\'>' + triggerHappy + '</p>');
-            $('#messages').append($p);
-            $p.fadeIn(500).fadeOut(1000);
+            var message = (player.Id == connectionId ? 'Du' : player.Name) + ' tjuvstartade! -1 poäng.';
+            showMessage(message, 'ff0000', 1000);
         }
 
         function playerDisconnected(player) {
-            var $p = $('<p style=\'background-color:#bbbbbb;\'>' + player.Name + ' disconnected.</p>');
+            var message = player.Name + ' har lämnat spelet.';
+            showMessage(message, 'cccccc', 8000);
+        }
+
+        function playerJoined(player) {
+            var message = player.Name + ' är med i spelet!';
+            showMessage(message, 'cccccc', 8000);
+        }
+
+        function showMessage(message, color, fadeOutDuration) {
+            var $p = $('<p style=\'background-color:#' + color + '\'>' + message + '</p>');
             $('#messages').append($p);
-            $p.fadeIn(500).fadeOut(8000);
+            $p.fadeIn(500).fadeOut(fadeOutDuration);
         }
 
         function targetClicked() {
