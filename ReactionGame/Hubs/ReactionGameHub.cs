@@ -29,7 +29,7 @@ namespace ReactionGame.Hubs
 
         public void ChatMessageSent(string message)
         {
-            GameBookkeeper.Instance.ChatMessageSent(message);
+            GameBookkeeper.Instance.ChatMessageSent(message, Context.ConnectionId);
         }
     }
 }

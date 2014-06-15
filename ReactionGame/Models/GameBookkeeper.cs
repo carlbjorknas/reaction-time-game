@@ -25,6 +25,7 @@ namespace ReactionGame.Models
         private GameStatus _gameStatus = GameStatus.NewGame;
         private Random _random = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
         private Timer _timer;
+        private Logger _logger = new Logger();
         private readonly static Lazy<GameBookkeeper> _instance =
             new Lazy<GameBookkeeper>(() => new GameBookkeeper(GlobalHost.ConnectionManager.GetHubContext<ReactionGameHub>().Clients));
         private object _clickLock = new object();
@@ -33,6 +34,7 @@ namespace ReactionGame.Models
         {
             _clients = clients;
             ChangeGameStatus(null);
+            Log("Hub started");
         }
 
         public static GameBookkeeper Instance { get { return _instance.Value; } }
@@ -43,6 +45,7 @@ namespace ReactionGame.Models
             SendUpdateListOfPlayers();
             _clients.Client(player.Id).updateGameStatus(_gameStatus.ToString());
             _clients.All.playerJoined(player);
+            Log("Client joined: " + player.Name);
         }
 
         private void ChangeGameStatus(object state){
@@ -81,12 +84,14 @@ namespace ReactionGame.Models
                         ChangeGameStatus(null);
                         SendUpdateListOfPlayers();
                         _clients.All.showFastestClicker(player);
+                        Log("Fastest player: " + player.Name + ", points: " + player.Points);
                     }
                     else if (_gameStatus == GameStatus.GetReady)
                     {
                         player.Points--;
                         SendUpdateListOfPlayers();
                         _clients.All.showTooTriggerHappy(player);
+                        Log("Trigger happy: " + player.Name + ", points: " + player.Points);
                     }
                 }
             }
@@ -99,6 +104,7 @@ namespace ReactionGame.Models
             {
                 SendUpdateListOfPlayers();
                 _clients.All.playerDisconnected(player);
+                Log("Player exited: " + player.Name);
             }
         }
 
@@ -111,9 +117,18 @@ namespace ReactionGame.Models
                 .ToArray());
         }
 
-        internal void ChatMessageSent(string message)
+        internal void ChatMessageSent(string message, string id)
         {
             _clients.All.showChatMessage(message);
+            Player player;
+            if (_players.TryGetValue(id, out player)){
+                Log(player.Name + " said: " + message);
+            }            
+        }
+
+        private void Log(string message)
+        {
+            _logger.Log(message);
         }
     }
 }
