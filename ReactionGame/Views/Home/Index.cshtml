@@ -79,7 +79,8 @@
         }
 
         function showFastestClicker(player, connectionId) {
-            $('#message').text('Snabbast var ' + player.Name).fadeIn(500).fadeOut(3000);
+            var fastest = player.Id == connectionId ? 'DU!!!' : player.Name;
+            $('#message').text('Snabbast var ' + fastest).fadeIn(500).fadeOut(3000);
         }
 
         function targetClicked() {
