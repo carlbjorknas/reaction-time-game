@@ -26,5 +26,10 @@ namespace ReactionGame.Hubs
         {
             GameBookkeeper.Instance.TargetClicked(Context.ConnectionId);
         }
+
+        public void ChatMessageSent(string message)
+        {
+            GameBookkeeper.Instance.ChatMessageSent(message);
+        }
     }
 }

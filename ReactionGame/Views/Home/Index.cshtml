@@ -4,6 +4,7 @@
 
 <h2>Du är nu med i Reaktionstidsspelet :)</h2>
 <div>
+    <input type="text" id="chatMessage" /> <input type="button" id="chatButton" onclick="chatMessageButtonClicked();" value="Skicka meddelande"/>
     <input type="hidden" id="playerName" />
     <div id="players"></div>
     <br />
@@ -32,12 +33,19 @@
             $gameHub.client.showTooTriggerHappy = function (player) { showTooTriggerHappy(player, $gameHub.connection.id); };
             $gameHub.client.playerJoined = function (player) { playerJoined(player); };
             $gameHub.client.playerDisconnected = function (player) { playerDisconnected(player); };
+            $gameHub.client.showChatMessage = function (message) { showChatMessage(message); };
 
             // Get the user name and store it to prepend to messages.
             $('#playerName').val(prompt('Enter your name:', ''));
             // Start the connection.
             $connection.hub.start().done(function () {
                 $gameHub.server.join($('#playerName').val());
+            });
+
+            $('#chatMessage').keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $('#chatButton').click();
+                };
             });
         });
 
@@ -101,14 +109,23 @@
             showMessage(message, 'cccccc', 8000);
         }
 
+        function showChatMessage(message) {
+            var encoded = htmlEncode(message);
+            showMessage(encoded, '9999ff', 15000);
+        }
+
         function showMessage(message, color, fadeOutDuration) {
-            var $p = $('<p style=\'background-color:#' + color + '\'>' + message + '</p>');
+            var $p = $('<b><p style=\'background-color:#' + color + '\'>' + message + '</p></b>');
             $('#messages').append($p);
             $p.fadeIn(500).fadeOut(fadeOutDuration);
         }
 
         function targetClicked() {
             $.connection.reactionGameHub.server.targetClicked();
+        }
+
+        function chatMessageButtonClicked() {
+            $.connection.reactionGameHub.server.chatMessageSent($('#chatMessage').val());
         }
     </script>
 }

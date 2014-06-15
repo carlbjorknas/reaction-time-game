@@ -110,5 +110,10 @@ namespace ReactionGame.Models
                 .OrderByDescending(p=>p.Points)
                 .ToArray());
         }
+
+        internal void ChatMessageSent(string message)
+        {
+            _clients.All.showChatMessage(message);
+        }
     }
 }
