@@ -30,6 +30,7 @@
             $gameHub.client.updateGameStatus = function (status) { updateGameStatus(status); };
             $gameHub.client.showFastestClicker = function (player) { showFastestClicker(player, $gameHub.connection.id); };
             $gameHub.client.showTooTriggerHappy = function (player) { showTooTriggerHappy(player, $gameHub.connection.id); };
+            $gameHub.client.playerDisconnected = function (player) { playerDisconnected(player); };
 
             // Get the user name and store it to prepend to messages.
             $('#playerName').val(prompt('Enter your name:', ''));
@@ -91,6 +92,12 @@
             var $p = $('<p style=\'background-color:#ff0000;\'>' + triggerHappy + '</p>');
             $('#messages').append($p);
             $p.fadeIn(500).fadeOut(1000);
+        }
+
+        function playerDisconnected(player) {
+            var $p = $('<p style=\'background-color:#bbbbbb;\'>' + player.Name + ' disconnected.</p>');
+            $('#messages').append($p);
+            $p.fadeIn(500).fadeOut(8000);
         }
 
         function targetClicked() {

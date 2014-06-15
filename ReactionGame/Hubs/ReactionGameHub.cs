@@ -4,14 +4,16 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using ReactionGame.Models;
+using System.Threading.Tasks;
 
 namespace ReactionGame.Hubs
 {
     public class ReactionGameHub : Hub
-    {     
-        public void Hello()
+    {
+        public override Task OnDisconnected()
         {
-            Clients.All.hello();
+            GameBookkeeper.Instance.RemovePlayer(Context.ConnectionId);
+            return base.OnDisconnected();
         }
 
         public void Join(string name)

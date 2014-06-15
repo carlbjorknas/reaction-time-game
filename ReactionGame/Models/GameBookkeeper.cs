@@ -89,5 +89,15 @@ namespace ReactionGame.Models
                 }
             }
         }
+
+        internal void RemovePlayer(string id)
+        {
+            Player player;
+            if (_players.TryRemove(id, out player))
+            {
+                _clients.All.updateListOfPlayers(_players);
+                _clients.All.playerDisconnected(player);
+            }
+        }
     }
 }
