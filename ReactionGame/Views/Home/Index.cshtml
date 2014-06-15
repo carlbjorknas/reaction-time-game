@@ -7,7 +7,7 @@
     <input type="hidden" id="playerName" />
     <ul id="listOfPlayers"></ul>
     <br />
-    <p id="message"></p>
+    <div id="messages"></div>
     <div id="clickTarget" style="width:200px;height:200px;text-align: center;vertical-align: middle;line-height: 200px;font-size:20px;font-weight:bold;cursor:pointer;" onclick="targetClicked()">
 
     </div>
@@ -80,13 +80,17 @@
         }
 
         function showFastestClicker(player, connectionId) {
-            var fastest = player.Id == connectionId ? 'DU!!!' : player.Name;
-            $('#message').text('Snabbast var ' + fastest).fadeIn(500).fadeOut(3000);
+            var fastest = 'Snabbast var ' + (player.Id == connectionId ? 'DU!!! +1 poäng.' : player.Name);
+            var $p = $('<p style=\'background-color:#00ff00;\'>' + fastest + '</p>');
+            $('#messages').append($p);
+            $p.fadeIn(500).fadeOut(3000);
         }
 
         function showTooTriggerHappy(player, connectionId) {
-            var triggerHappy = player.Id == connectionId ? 'Du' : player.Name;
-            $('#message').text(triggerHappy + ' tjuvstartade!').fadeIn(500).fadeOut(1000);
+            var triggerHappy = (player.Id == connectionId ? 'Du' : player.Name) + ' tjuvstartade! -1 poäng.';
+            var $p = $('<p style=\'background-color:#ff0000;\'>' + triggerHappy + '</p>');
+            $('#messages').append($p);
+            $p.fadeIn(500).fadeOut(1000);
         }
 
         function targetClicked() {
