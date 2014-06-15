@@ -60,7 +60,7 @@ namespace ReactionGame.Models
                     break;
                 case GameStatus.Go:
                     _gameStatus = GameStatus.Stop;
-                    _timer.Change(10000, Timeout.Infinite);
+                    _timer.Change(3000, Timeout.Infinite);
                     break;
             }
             _clients.All.updateGameStatus(_gameStatus.ToString());     

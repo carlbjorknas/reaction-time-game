@@ -7,7 +7,7 @@
 <div>
     <input type="hidden" id="playerName" />
     <ul id="listOfPlayers"></ul>
-    <div id="clickTarget" style="width:200px;height:200px" onclick="targetClicked()">
+    <div id="clickTarget" style="width:200px;height:200px;text-align: center;vertical-align: middle;line-height: 200px;font-size:20px;font-weight:bold" onclick="targetClicked()">
 
     </div>
 </div>
@@ -52,14 +52,27 @@
 
         function updateGameStatus(status){            
             var color;
+            var text;
             switch (status) {
-                case "GetReady": color = '#ffff00'; break;
-                case "Go": color = '#00ff00'; break;
-                case "Stop": color = '#ff0000'; break;
-                default: color = '#000000'; break;
+                case "GetReady":
+                    color = '#ffff00';
+                    text = 'Var beredd!';
+                    break;
+                case "Go":
+                    color = '#00ff00';
+                    text = 'KLICKA!!!';
+                    break;
+                case "Stop":
+                    color = '#ff0000';
+                    text = 'Stopp!';
+                    break;
+                default:
+                    color = '#000000';
+                    break;
             }
             var $clicktarget = $('#clickTarget');
             $clicktarget.css('background-color', color);
+            $clicktarget.text(text);
         }
 
         function targetClicked() {
