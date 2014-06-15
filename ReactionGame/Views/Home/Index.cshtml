@@ -2,14 +2,16 @@
     ViewBag.Title = "Reaktionstisspelet";
 }
 
-<h2>Du är nu med i Reaktionstidsspelet :)</h2>
-<div>
+<div style="width:800px; margin:0 auto;background-color:#fe96f8;text-align:center;padding:40px;	border-radius: 25px;" >
+    <h2>Du är nu med i Reaktionstidsspelet :)</h2>
     <input type="text" id="chatMessage" /> <input type="button" id="chatButton" onclick="chatMessageButtonClicked();" value="Skicka meddelande"/>
     <input type="hidden" id="playerName" />
+    <br />
+    <br />
     <div id="players"></div>
     <br />
     <div id="messages"></div>
-    <div id="clickTarget" style="width:200px;height:100px;text-align: center;vertical-align: middle;line-height: 100px;font-size:20px;font-weight:bold;cursor:pointer;" onclick="targetClicked()">
+    <div id="clickTarget" style="width:200px;height:100px;text-align: center; vertical-align: middle;line-height: 100px;font-size:20px;font-weight:bold;cursor:pointer;margin:0 auto;border-radius: 25px;" onclick="targetClicked()">
 
     </div>
 </div>
