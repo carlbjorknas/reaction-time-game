@@ -5,10 +5,10 @@
 <h2>Du är nu med i Reaktionstidsspelet :)</h2>
 <div>
     <input type="hidden" id="playerName" />
-    <ul id="listOfPlayers"></ul>
+    <div id="players"></div>
     <br />
     <div id="messages"></div>
-    <div id="clickTarget" style="width:200px;height:200px;text-align: center;vertical-align: middle;line-height: 200px;font-size:20px;font-weight:bold;cursor:pointer;" onclick="targetClicked()">
+    <div id="clickTarget" style="width:200px;height:100px;text-align: center;vertical-align: middle;line-height: 100px;font-size:20px;font-weight:bold;cursor:pointer;" onclick="targetClicked()">
 
     </div>
 </div>
@@ -47,12 +47,12 @@
         }
 
         function updateListOfPlayers(players, connectionId) {
-            var $listOfPlayers = $('#listOfPlayers');
+            var $listOfPlayers = $('#players');
             $listOfPlayers.empty();
             $.each(players, function (index, player) {
-                var playerInfo = htmlEncode(player.Name) + ': ' + player.Points;
+                var playerInfo = index+1 + '. ' + htmlEncode(player.Name) + ': ' + player.Points;
                 playerInfo = player.Id == connectionId ? '<b>' + playerInfo + '</b>' : playerInfo;
-                $listOfPlayers.append('<li>' + playerInfo + '</li>');
+                $listOfPlayers.append('<p>' + playerInfo + '</p>');
             });
         }
 
@@ -88,7 +88,7 @@
 
         function showTooTriggerHappy(player, connectionId) {
             var message = (player.Id == connectionId ? 'Du' : player.Name) + ' tjuvstartade! -1 poäng.';
-            showMessage(message, 'ff0000', 1000);
+            showMessage(message, 'ff0000', 2000);
         }
 
         function playerDisconnected(player) {
