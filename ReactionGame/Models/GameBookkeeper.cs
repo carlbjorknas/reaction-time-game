@@ -2,6 +2,7 @@
 using Microsoft.AspNet.SignalR.Hubs;
 using ReactionGame.Hubs;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,7 +21,7 @@ namespace ReactionGame.Models
         }
 
         private IHubConnectionContext _clients;
-        private readonly List<string> _players = new List<string>();
+        private readonly ConcurrentDictionary<string, Player> _players = new ConcurrentDictionary<string, Player>();
         private GameStatus _gameStatus = GameStatus.NewGame;
         private Random _random = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
         private Timer _timer;
@@ -35,9 +36,9 @@ namespace ReactionGame.Models
 
         public static GameBookkeeper Instance { get { return _instance.Value; } }
 
-        public void AddPlayer(string name)
+        public void AddPlayer(Player player)
         {
-            _players.Add(name);
+            _players.AddOrUpdate(player.Id, player, (k, v) => { v.Name = player.Name; return v; });
             _clients.All.updateListOfPlayers(_players);
         }
 

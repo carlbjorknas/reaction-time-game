@@ -16,7 +16,8 @@ namespace ReactionGame.Hubs
 
         public void Join(string name)
         {
-            GameBookkeeper.Instance.AddPlayer(name);           
+            var player = new Player(Context.ConnectionId, name);
+            GameBookkeeper.Instance.AddPlayer(player);           
         }
     }
 }

@@ -22,24 +22,26 @@
     <!--SignalR script to update the chat page and send messages.-->
     <script>
         $(function () {
-            // Reference the auto-generated proxy for the hub.
-            var game = $.connection.reactionGameHub;
+            var $connection = $.connection;
+            var $gameHub = $connection.reactionGameHub;
             // Create a function that the hub can call back to display messages.
-            game.client.updateListOfPlayers = function (players) {
+            $gameHub.client.updateListOfPlayers = function (players) {
                 var $listOfPlayers = $('#listOfPlayers');
                 $listOfPlayers.empty();
                 $.each(players, function (index, player) {
-                    $listOfPlayers.append('<li>' + htmlEncode(player) + '</li>');
+                    var playerInfo = htmlEncode(player.Name) + ': ' + player.Points;
+                    playerInfo = player.Id == $gameHub.connection.id ? '<b>' + playerInfo + '</b>' : playerInfo;
+                    $listOfPlayers.append('<li>' + playerInfo + '</li>');
                 });                
             };
 
-            game.client.updateGameStatus = function (status) { updateGameStatus(status) };
+            $gameHub.client.updateGameStatus = function (status) { updateGameStatus(status) };
             // Get the user name and store it to prepend to messages.
             $('#playerName').val(prompt('Enter your name:', ''));
             // Start the connection.
-            $.connection.hub.start().done(function () {
+            $connection.hub.start().done(function () {
                 // Call the Send method on the hub.
-                game.server.join($('#playerName').val());           
+                $gameHub.server.join($('#playerName').val());           
             });
         });
 
