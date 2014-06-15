@@ -7,7 +7,7 @@
 <div>
     <input type="hidden" id="playerName" />
     <ul id="listOfPlayers"></ul>
-    <div id="clickTarget" style="width:200px;height:200px">
+    <div id="clickTarget" style="width:200px;height:200px" onclick="targetClicked()">
 
     </div>
 </div>
@@ -60,6 +60,10 @@
             }
             var $clicktarget = $('#clickTarget');
             $clicktarget.css('background-color', color);
+        }
+
+        function targetClicked() {
+            $.connection.reactionGameHub.server.targetClicked();
         }
     </script>
 }

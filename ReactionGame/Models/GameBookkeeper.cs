@@ -27,6 +27,7 @@ namespace ReactionGame.Models
         private Timer _timer;
         private readonly static Lazy<GameBookkeeper> _instance =
             new Lazy<GameBookkeeper>(() => new GameBookkeeper(GlobalHost.ConnectionManager.GetHubContext<ReactionGameHub>().Clients));
+        private object _clickLock = new object();
 
         private GameBookkeeper(IHubConnectionContext clients)
         {
@@ -57,8 +58,29 @@ namespace ReactionGame.Models
                     _gameStatus = GameStatus.Go;
                     _timer.Change(Timeout.Infinite, Timeout.Infinite);
                     break;
+                case GameStatus.Go:
+                    _gameStatus = GameStatus.Stop;
+                    _timer.Change(10000, Timeout.Infinite);
+                    break;
             }
             _clients.All.updateGameStatus(_gameStatus.ToString());     
+        }
+
+        internal void TargetClicked(string connectionId)
+        {
+            lock (_clickLock)
+            {
+                Player player;
+                if (_players.TryGetValue(connectionId, out player))
+                {
+                    if (_gameStatus == GameStatus.Go)
+                    {
+                        player.Points++;
+                        ChangeGameStatus(null);
+                        _clients.All.updateListOfPlayers(_players);
+                    }
+                }
+            }
         }
     }
 }

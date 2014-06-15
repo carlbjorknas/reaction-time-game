@@ -19,5 +19,10 @@ namespace ReactionGame.Hubs
             var player = new Player(Context.ConnectionId, name);
             GameBookkeeper.Instance.AddPlayer(player);           
         }
+
+        public void TargetClicked()
+        {
+            GameBookkeeper.Instance.TargetClicked(Context.ConnectionId);
+        }
     }
 }
