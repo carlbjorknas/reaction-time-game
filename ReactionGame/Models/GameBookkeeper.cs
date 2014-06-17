@@ -26,6 +26,7 @@ namespace ReactionGame.Models
         private Random _random = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
         private Timer _timer;
         private Logger _logger = new Logger();
+        private DateTime _timestamp;
         private readonly static Lazy<GameBookkeeper> _instance =
             new Lazy<GameBookkeeper>(() => new GameBookkeeper(GlobalHost.ConnectionManager.GetHubContext<ReactionGameHub>().Clients));
         private object _clickLock = new object();
@@ -62,6 +63,7 @@ namespace ReactionGame.Models
                 case GameStatus.GetReady:
                     _gameStatus = GameStatus.Go;
                     _timer.Change(Timeout.Infinite, Timeout.Infinite);
+                    _timestamp = DateTime.Now;
                     break;
                 case GameStatus.Go:
                     _gameStatus = GameStatus.Stop;
@@ -73,6 +75,7 @@ namespace ReactionGame.Models
 
         internal void TargetClicked(string connectionId)
         {
+            var now = DateTime.Now;
             lock (_clickLock)
             {
                 Player player;
@@ -81,10 +84,12 @@ namespace ReactionGame.Models
                     if (_gameStatus == GameStatus.Go)
                     {
                         player.Points++;
-                        ChangeGameStatus(null);
+                        ChangeGameStatus(null);                        
+                        var reactionTime = (int)(now - _timestamp).TotalMilliseconds;
+                        player.UpdateFastestReactionTime(reactionTime);
                         SendUpdateListOfPlayers();
-                        _clients.All.showFastestClicker(player);
-                        Log("Fastest player: " + player.Name + ", points: " + player.Points);
+                        _clients.All.showFastestClicker(player, reactionTime);
+                        Log("Fastest player: " + player.Name + ", points: " + player.Points + ", reaction time: " + reactionTime + ", fastest: " + player.FastestReactionTime);
                     }
                     else if (_gameStatus == GameStatus.GetReady)
                     {

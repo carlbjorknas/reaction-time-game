@@ -12,8 +12,17 @@ namespace ReactionGame.Models
             Id = id;
             Name = name;            
         }
+
+        public void UpdateFastestReactionTime(int reactionTime)
+        {
+            if (reactionTime < FastestReactionTime || FastestReactionTime == 0)
+            {
+                FastestReactionTime = reactionTime;
+            }
+        }
         public string Id { get; private set; }
         public string Name { get; set; }
         public int Points { get; set; }
+        public int FastestReactionTime { get; set; }
     }
 }

@@ -31,7 +31,7 @@
 
             $gameHub.client.updateListOfPlayers = function (players) { updateListOfPlayers(players, $gameHub.connection.id); };
             $gameHub.client.updateGameStatus = function (status) { updateGameStatus(status); };
-            $gameHub.client.showFastestClicker = function (player) { showFastestClicker(player, $gameHub.connection.id); };
+            $gameHub.client.showFastestClicker = function (player, diff) { showFastestClicker(player, $gameHub.connection.id, diff); };
             $gameHub.client.showTooTriggerHappy = function (player) { showTooTriggerHappy(player, $gameHub.connection.id); };
             $gameHub.client.playerJoined = function (player) { playerJoined(player); };
             $gameHub.client.playerDisconnected = function (player) { playerDisconnected(player); };
@@ -60,7 +60,7 @@
             var $listOfPlayers = $('#players');
             $listOfPlayers.empty();
             $.each(players, function (index, player) {
-                var playerInfo = index+1 + '. ' + htmlEncode(player.Name) + ': ' + player.Points;
+                var playerInfo = index+1 + '. ' + htmlEncode(player.Name) + ': ' + player.Points + ' poäng. Snabbaste tid: ' + player.FastestReactionTime + 'ms';
                 playerInfo = player.Id == connectionId ? '<b>' + playerInfo + '</b>' : playerInfo;
                 $listOfPlayers.append('<p>' + playerInfo + '</p>');
             });
@@ -91,8 +91,8 @@
             $clicktarget.text(text);
         }
 
-        function showFastestClicker(player, connectionId) {
-            var message = 'Snabbast var ' + (player.Id == connectionId ? 'DU!!! +1 poäng.' : player.Name);
+        function showFastestClicker(player, connectionId, diff) {
+            var message = 'Snabbast var ' + (player.Id == connectionId ? 'DU!!! +1 poäng.' : player.Name) + ' Reaktionstid: ' + diff + 'ms!';
             showMessage(message, '00ff00', 3000);
         }
 
