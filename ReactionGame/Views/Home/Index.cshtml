@@ -2,7 +2,7 @@
     ViewBag.Title = "Reaktionstisspelet";
 }
 
-<div style="width:800px; margin:0 auto;background-color:#fe96f8;text-align:center;padding:40px;	border-radius: 25px;" >
+<div style="width:700px; margin:0 auto;background-color:#fe96f8;text-align:center;padding:40px;	border-radius: 25px;" >
     <h2>Du är nu med i Reaktionstidsspelet :)</h2>
     <input type="text" id="chatMessage" /> <input type="button" id="chatButton" onclick="chatMessageButtonClicked();" value="Skicka meddelande"/>
     <input type="hidden" id="playerName" />
@@ -126,8 +126,9 @@
             $.connection.reactionGameHub.server.targetClicked();
         }
 
-        function chatMessageButtonClicked() {
+        function chatMessageButtonClicked() {            
             $.connection.reactionGameHub.server.chatMessageSent($('#chatMessage').val());
+            $('#chatMessage').val('');
         }
     </script>
 }

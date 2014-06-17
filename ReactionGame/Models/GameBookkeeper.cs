@@ -118,10 +118,10 @@ namespace ReactionGame.Models
         }
 
         internal void ChatMessageSent(string message, string id)
-        {
-            _clients.All.showChatMessage(message);
+        {            
             Player player;
             if (_players.TryGetValue(id, out player)){
+                _clients.All.showChatMessage(player.Name + ": " + message);
                 Log(player.Name + " said: " + message);
             }            
         }
